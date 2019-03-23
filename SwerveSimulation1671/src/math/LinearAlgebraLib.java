@@ -10,6 +10,14 @@ public class LinearAlgebraLib {
 		return dotProduct;
 	}
 	
+	public static Vector add(Vector a, Vector b) {
+		Vector result = new Vector(new double[a.getDimensions()]);
+		for(int i = 0; i < result.getDimensions(); i++) {
+			result.setComponent(i, a.getComponent(i) + b.getComponent(i));
+		}
+		return result;
+	}
+	
 	public static Matrix multiply(Matrix a, Matrix b) {
 		Matrix result = new Matrix(new int[a.getRows()][b.getColumns()]);
 		for(int i = 0; i < result.getRows(); i++) {
