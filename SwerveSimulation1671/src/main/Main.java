@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.glfw.GLFWVidMode;
 
 import drive.SwerveTrain;
+import drive.SwerveWheel;
 
 public class Main {
 	
@@ -39,8 +40,16 @@ public class Main {
 			glfwPollEvents();
 			glClear(GL_COLOR_BUFFER_BIT);
 			
-			glColor4f(0.5f, 0.5f, 0.5f, 0.5f);
-			glLineWidth(3.8f);
+			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			glBegin(GL_QUADS);
+				glVertex2d(-1.0, 1.0);
+				glVertex2d(1.0, 1.0);
+				glVertex2d(1.0, -1.0);
+				glVertex2d(-1.0, -1.0);
+			glEnd();
+			
+			glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+			glLineWidth(7.5f);
 			drawRect(driveBase.getWheel("lF").getPosition().getX(),
 					driveBase.getWheel("lF").getPosition().getY(),
 					driveBase.getWheel("rF").getPosition().getX(),
@@ -49,6 +58,12 @@ public class Main {
 					driveBase.getWheel("rB").getPosition().getY(),
 					driveBase.getWheel("lB").getPosition().getX(),
 					driveBase.getWheel("lB").getPosition().getY());
+			
+			glColor4f(0.0f, 0.5f, 0.0f, 1.0f);
+			drawWheel(driveBase.getWheel("lF"));
+			drawWheel(driveBase.getWheel("lB"));
+			drawWheel(driveBase.getWheel("rF"));
+			drawWheel(driveBase.getWheel("rB"));
 			
 			glfwSwapBuffers(window);
 			driveBase.drive(0.01 * getAxis(0), 0.01 * -getAxis(1), 0.01 * getAxis(2));
@@ -73,6 +88,13 @@ public class Main {
 		drawLine(point2X, point2Y, point3X, point3Y);
 		drawLine(point3X, point3Y, point4X, point4Y);
 		drawLine(point4X, point4Y, pointX, pointY);
+	}
+	
+	private void drawWheel(SwerveWheel wheel) {
+		drawLine(wheel.getPosition().getX(),
+				wheel.getPosition().getY(),
+				wheel.getPosition().getX() + 7.5 * wheel.getVector().getX(),
+				wheel.getPosition().getY() + 7.5 * wheel.getVector().getY());
 	}
 	
 	static double getAxis(int axis) {

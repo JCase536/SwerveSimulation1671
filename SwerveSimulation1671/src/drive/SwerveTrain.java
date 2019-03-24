@@ -13,16 +13,21 @@ public class SwerveTrain {
 	private double gyroPosX = 0;
 	private double gyroPosY = 0;
 	
+	/*
 	private final double length = 30.0;
 	private final double width = 28.0;
 	private final double diagonal = 41.04;
+	*/
+	private final double length = 0.15;
+	private final double width = 0.14;
+	private final double diagonal = 0.2052;
 	
 	
 	public SwerveTrain() {
-		lF = new SwerveWheel(1, 5, -0.14, 0.15);
-		lB = new SwerveWheel(2, 6, -0.14, -0.15);
-		rF = new SwerveWheel(3, 7, 0.14, 0.15);
-		rB = new SwerveWheel(4, 8, 0.14, -0.15);
+		lF = new SwerveWheel(1, 5, -width, length);
+		lB = new SwerveWheel(2, 6, -width, -length);
+		rF = new SwerveWheel(3, 7, width, length);
+		rB = new SwerveWheel(4, 8, width, -length);
 		gyro = new Vector2D(0, 0);
 	}
 	
@@ -40,18 +45,20 @@ public class SwerveTrain {
 		System.out.println((int)(lF.getVector().getAngle() * 180.0/Math.PI) + "     " + (int)(rF.getVector().getAngle() * 180.0/Math.PI) + "\n\n\n");
 		System.out.println((int)(lB.getVector().getAngle() * 180.0/Math.PI) + "     " + (int)(rB.getVector().getAngle() * 180.0/Math.PI) + "\n\n\n\n\n\n\n\n\n");
 		
-		lF.set(tX + r * getRotation(lF, 1.0, 1.0).getX(), tY + r * getRotation(lF, 1.0, 1.0).getY());
-		lB.set(tX + r * getRotation(lB, -1.0, 1.0).getX(), tY + r * getRotation(lB, -1.0, 1.0).getY());
-		rF.set(tX + r * getRotation(rF, 1.0, -1.0).getX(), tY + r * getRotation(rF, 1.0, -1.0).getY());
-		rB.set(tX + r * getRotation(rB, -1.0, -1.0).getX(), tY + r * getRotation(rB, -1.0, -1.0).getY());
-		System.out.println(gyro.getAngle());
+		lF.set(tX + r * getRotation(lF).getX(), tY + r * getRotation(lF).getY());
+		lB.set(tX + r * getRotation(lB).getX(), tY + r * getRotation(lB).getY());
+		rF.set(tX + r * getRotation(rF).getX(), tY + r * getRotation(rF).getY());
+		rB.set(tX + r * getRotation(rB).getX(), tY + r * getRotation(rB).getY());
 	}
 	
-	public Vector2D getRotation(SwerveWheel wheel, double signX, double signY) {
-		double diagonal = 0.2052;
-		double x = Math.cos(Math.acos(2.0 * signX * (wheel.getPosition().getY() - gyroPosY) / this.diagonal) + gyro.getAngle());
-		double y = Math.sin(Math.asin(2.0 * signY * (wheel.getPosition().getX() - gyroPosX) / this.diagonal) + gyro.getAngle());
+	public Vector2D getRotation(SwerveWheel wheel) {
+		double x = (wheel.getPosition().getY() - gyroPosY);
+		double y = -(wheel.getPosition().getX() - gyroPosX);
 		return new Vector2D(x, y);
+	}
+	
+	public double aTrigRange(double val) {
+		return Math.min(Math.max(val, -1), 1);
 	}
 	
 	public double deadZone(double val, double deadZone) {
