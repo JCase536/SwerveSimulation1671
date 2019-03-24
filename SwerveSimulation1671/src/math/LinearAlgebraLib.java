@@ -10,10 +10,21 @@ public class LinearAlgebraLib {
 		return dotProduct;
 	}
 	
-	public static Vector add(Vector a, Vector b) {
-		Vector result = new Vector(new double[a.getDimensions()]);
+	public static Vector add(Vector... v) {
+		Vector result = new Vector(new double[v[0].getDimensions()]);
 		for(int i = 0; i < result.getDimensions(); i++) {
-			result.setComponent(i, a.getComponent(i) + b.getComponent(i));
+			result.setComponent(i, 0);
+			for(int j = 0; j < v.length; j++) {
+				result.setComponent(i, result.getComponent(i) + v[j].getComponent(i));
+			}
+		}
+		return result;
+	}
+	
+	public static Vector2D add(Vector2D... v) {
+		Vector2D result = new Vector2D(0, 0);
+		for(int i = 0; i < v.length; i++) {
+			result.set(result.getX() + v[i].getX(), result.getY() + v[i].getY());
 		}
 		return result;
 	}

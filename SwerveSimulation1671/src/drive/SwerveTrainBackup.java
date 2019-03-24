@@ -3,22 +3,20 @@ package drive;
 import math.LinearAlgebraLib;
 import math.Vector2D;
 
-public class SwerveTrain {
+public class SwerveTrainBackup {
 	
 	private SwerveWheel lF;
 	private SwerveWheel lB;
 	private SwerveWheel rF;
 	private SwerveWheel rB;
 	private Vector2D gyro;
-	private double gyroPosX = 0;
-	private double gyroPosY = 0;
 	
-	private final double length = 30.0;
-	private final double width = 28.0;
+	private final double length = 30;
+	private final double width = 28;
 	private final double diagonal = 41.04;
 	
 	
-	public SwerveTrain() {
+	public SwerveTrainBackup() {
 		lF = new SwerveWheel(1, 5, -0.14, 0.15);
 		lB = new SwerveWheel(2, 6, -0.14, -0.15);
 		rF = new SwerveWheel(3, 7, 0.14, 0.15);
@@ -34,24 +32,19 @@ public class SwerveTrain {
 		double gX = rF.getPosition().getX() - lF.getPosition().getX();
 		double gY = rF.getPosition().getY() - lF.getPosition().getY();
 		gyro.set(gX, gY);
-		gyroPosX += tX;
-		gyroPosY += tY;
 		
 		System.out.println((int)(lF.getVector().getAngle() * 180.0/Math.PI) + "     " + (int)(rF.getVector().getAngle() * 180.0/Math.PI) + "\n\n\n");
 		System.out.println((int)(lB.getVector().getAngle() * 180.0/Math.PI) + "     " + (int)(rB.getVector().getAngle() * 180.0/Math.PI) + "\n\n\n\n\n\n\n\n\n");
 		
-		lF.set(tX + r * getRotation(lF, 1.0, 1.0).getX(), tY + r * getRotation(lF, 1.0, 1.0).getY());
-		lB.set(tX + r * getRotation(lB, -1.0, 1.0).getX(), tY + r * getRotation(lB, -1.0, 1.0).getY());
-		rF.set(tX + r * getRotation(rF, 1.0, -1.0).getX(), tY + r * getRotation(rF, 1.0, -1.0).getY());
-		rB.set(tX + r * getRotation(rB, -1.0, -1.0).getX(), tY + r * getRotation(rB, -1.0, -1.0).getY());
-		System.out.println(gyro.getAngle());
+		lF.set(tX + r / diagonal * (getRotation(lF).getX() * gX - getRotation(lF).getY() * gY) + getX(), tY + r / diagonal * (getRotation(lF).getX() * gY + getRotation(lF).getX() * gY) + getY());
+		lB.set(tX + r / -diagonal * (getRotation(lB).getX() * gX - getRotation(lB).getY() * gY) - getX(), tY + r / diagonal * (getRotation(lB).getX() * gY + getRotation(lB).getX() * gY) + getY());
+		rF.set(tX + r / diagonal * (getRotation(rF).getX() * gX - getRotation(rF).getY() * gY) + getX(), tY + r / -diagonal * (getRotation(rF).getX() * gY + getRotation(rF).getX() * gY) - getY());
+		rB.set(tX + r / -diagonal * (getRotation(rB).getX() * gX - getRotation(rB).getY() * gY) - getX(), tY + r / -diagonal * (getRotation(rB).getX() * gY + getRotation(rB).getX() * gY) - getY());
+		//System.out.println(gyro.getAngle());
 	}
 	
-	public Vector2D getRotation(SwerveWheel wheel, double signX, double signY) {
-		double diagonal = 0.2052;
-		double x = Math.cos(Math.acos(2.0 * signX * (wheel.getPosition().getY() - gyroPosY) / this.diagonal) + gyro.getAngle());
-		double y = Math.sin(Math.asin(2.0 * signY * (wheel.getPosition().getX() - gyroPosX) / this.diagonal) + gyro.getAngle());
-		return new Vector2D(x, y);
+	public Vector2D getRotation(SwerveWheel wheel) {
+		return new Vector2D(wheel.getPosition().getX() - getX(), wheel.getPosition().getY() - getY());
 	}
 	
 	public double deadZone(double val, double deadZone) {
