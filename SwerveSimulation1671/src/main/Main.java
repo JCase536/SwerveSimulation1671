@@ -14,6 +14,8 @@ import drive.SwerveWheel;
 public class Main {
 	
 	private static SwerveTrain driveBase;
+	private static final int HEIGHT = 720;
+	private static final int WIDTH = 1280;
 	
 	public Main() {
 		if(!glfwInit()) {
@@ -21,13 +23,13 @@ public class Main {
 		}
 		
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-		long window = glfwCreateWindow(640, 480, "Swerve Simulation", 0, 0);
+		long window = glfwCreateWindow(WIDTH, HEIGHT, "Swerve Simulation", 0, 0);
 		if(window == 0) {
 			throw new IllegalStateException("Failed to create window!");
 		}
 		
 		GLFWVidMode videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		glfwSetWindowPos(window, (videoMode.width() - 640) / 2, (videoMode.height() - 480) / 2);
+		glfwSetWindowPos(window, (videoMode.width() - WIDTH) / 2, (videoMode.height() - HEIGHT) / 2);
 		glfwShowWindow(window);
 		glfwMakeContextCurrent(window);
 		GL.createCapabilities();
@@ -66,7 +68,7 @@ public class Main {
 			drawWheel(driveBase.getWheel("rB"));
 			
 			glfwSwapBuffers(window);
-			driveBase.drive(0.01 * getAxis(0), 0.01 * -getAxis(1), 0.01 * getAxis(2));
+			driveBase.drive(0.001 * getAxis(0), 0.001 * -getAxis(1), 0.001 * getAxis(2));
 		}
 		
 		glfwTerminate();
@@ -93,8 +95,8 @@ public class Main {
 	private void drawWheel(SwerveWheel wheel) {
 		drawLine(wheel.getPosition().getX(),
 				wheel.getPosition().getY(),
-				wheel.getPosition().getX() + 7.5 * wheel.getVector().getX(),
-				wheel.getPosition().getY() + 7.5 * wheel.getVector().getY());
+				wheel.getPosition().getX() + 200 * wheel.getVector().getX(),
+				wheel.getPosition().getY() + 200 * wheel.getVector().getY());
 	}
 	
 	static double getAxis(int axis) {

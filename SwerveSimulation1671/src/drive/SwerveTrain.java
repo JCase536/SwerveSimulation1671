@@ -32,9 +32,9 @@ public class SwerveTrain {
 	}
 	
 	public void drive(double axisTX, double axisTY, double axisR) {
-		double tX = deadZone(axisTX, 0.001);
-		double tY = deadZone(axisTY, 0.001);
-		double r = deadZone(axisR, 0.001);
+		double tX = deadZone(axisTX, 0.0001);
+		double tY = deadZone(axisTY, 0.0001);
+		double r = deadZone(axisR, 0.0001);
 		
 		double gX = rF.getPosition().getX() - lF.getPosition().getX();
 		double gY = rF.getPosition().getY() - lF.getPosition().getY();
