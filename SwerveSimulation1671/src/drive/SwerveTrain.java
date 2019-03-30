@@ -42,13 +42,32 @@ public class SwerveTrain {
 		gyroPosX += tX;
 		gyroPosY += tY;
 		
+		/*
 		System.out.println((int)(lF.getVector().getAngle() * 180.0/Math.PI) + "     " + (int)(rF.getVector().getAngle() * 180.0/Math.PI) + "\n\n\n");
 		System.out.println((int)(lB.getVector().getAngle() * 180.0/Math.PI) + "     " + (int)(rB.getVector().getAngle() * 180.0/Math.PI) + "\n\n\n\n\n\n\n\n\n");
+		*/
+		lF.setSetpoint(tX, tY);
+		lB.setSetpoint(tX, tY);
+		rF.setSetpoint(tX, tY);
+		rB.setSetpoint(tX, tY);
 		
+		lF.setR(r * getRotation(lF).getX(), r * getRotation(lF).getY());
+		lB.setR(r * getRotation(lB).getX(), r * getRotation(lB).getY());
+		rF.setR(r * getRotation(rF).getX(), r * getRotation(rF).getY());
+		rB.setR(r * getRotation(rB).getX(), r * getRotation(rB).getY());
+		
+		System.out.println("T: " + lF.getVectorT().getMagnitude());
+		System.out.println("R: " + lF.getVectorR().getMagnitude());
+		/*
 		lF.set(tX + r * getRotation(lF).getX(), tY + r * getRotation(lF).getY());
 		lB.set(tX + r * getRotation(lB).getX(), tY + r * getRotation(lB).getY());
 		rF.set(tX + r * getRotation(rF).getX(), tY + r * getRotation(rF).getY());
 		rB.set(tX + r * getRotation(rB).getX(), tY + r * getRotation(rB).getY());
+		*/
+		lF.update();
+		lB.update();
+		rF.update();
+		rB.update();
 	}
 	
 	public Vector2D getRotation(SwerveWheel wheel) {
@@ -63,9 +82,16 @@ public class SwerveTrain {
 	
 	public double deadZone(double val, double deadZone) {
 		if(Math.abs(val) > deadZone) {
-			return val;
+			return Math.max(Math.min(1.0, val), -1.0);
 		}
 		return 0.0;
+	}
+	
+	public double getSquared(double val) {
+		if(val < 0) {
+			return -val * val;
+		}
+		return val * val;
 	}
 	
 	public SwerveWheel getWheel(String wheel) {

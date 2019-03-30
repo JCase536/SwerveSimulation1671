@@ -14,8 +14,8 @@ import drive.SwerveWheel;
 public class Main {
 	
 	private static SwerveTrain driveBase;
-	private static final int HEIGHT = 720;
-	private static final int WIDTH = 1280;
+	private static final int HEIGHT = 900;
+	private static final int WIDTH = 900;
 	
 	public Main() {
 		if(!glfwInit()) {
@@ -90,6 +90,13 @@ public class Main {
 		drawLine(point2X, point2Y, point3X, point3Y);
 		drawLine(point3X, point3Y, point4X, point4Y);
 		drawLine(point4X, point4Y, pointX, pointY);
+		glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+		glBegin(GL_QUADS);
+			glVertex2d(pointX, pointY);
+			glVertex2d(point2X, point2Y);
+			glVertex2d((point2X + point3X) / 2.0, (point2Y + point3Y) / 2.0);
+			glVertex2d((pointX + point4X) / 2.0, (pointY + point4Y) / 2.0);
+		glEnd();
 	}
 	
 	private void drawWheel(SwerveWheel wheel) {
