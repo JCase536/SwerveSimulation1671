@@ -1,6 +1,6 @@
 package math;
 
-public class Vector2D extends Vector {
+public class Vector2D extends Vector implements Cloneable {
 	
 	private double x;
 	private double y;
@@ -17,13 +17,24 @@ public class Vector2D extends Vector {
 			} else {
 				angle = Math.atan(y/x) + Math.PI;
 			}
-		} else {
+		} else if(x > 0) {
 			angle = Math.atan(y/x);
+		} else {
+			if(y < 0) {
+				angle = -Math.PI / 2.0;
+			} else {
+				angle = Math.PI / 2.0;
+			}
 		}
+	}
+	
+	public Object clone() throws CloneNotSupportedException {  
+		return super.clone();  
 	}
 	
 	public void set(double x, double y) {
 		setComponent(0, x);
+		setComponent(1, y);
 		this.x = x;
 		this.y = y;
 		if(x < 0) {
@@ -32,8 +43,14 @@ public class Vector2D extends Vector {
 			} else {
 				angle = Math.atan(y/x) + Math.PI;
 			}
-		} else {
+		} else if(x > 0) {
 			angle = Math.atan(y/x);
+		} else {
+			if(y < 0) {
+				angle = -Math.PI / 2.0;
+			} else {
+				angle = Math.PI / 2.0;
+			}
 		}
 	}
 	
